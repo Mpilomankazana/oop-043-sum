@@ -1,0 +1,624 @@
+DO NOT CHANGE THE FORMAT -- DO NOT CREATE A NEW txt file
+
+Q4.4 (the ERD) is drawn in your GitLab wiki, on a page titled "Delivery Runs ERD".
+
+=== Question 1.1.1 ===
+#Answer below
+Agile is an iterative way of building software. Instead of planning everything up front and
+delivering once at the end, the team works in short, fixed-length iterations (sprints), takes the
+highest-priority items from a prioritised backlog, and delivers a small piece of working, tested
+software each time. The plan is adjusted after every iteration using feedback.
+
+How it helped Salesforce: their long requirements -> build -> test phases meant integration and testing
+happened late, so releases slipped, shrank and became unpredictable. With short time-boxed iterations,
+every team integrated and tested continuously and kept the product releasable, so the release schedule
+became regular and predictable again, and more features were delivered.
+
+=== Question 1.1.2 ===
+#Answer below
+STORY 1 - Recipient
+As a recipient, I want to enter my tracking number and see where my parcel is, so that I know when to
+expect it and whether I need to be home.
+Acceptance criteria:
+  1. Given a valid tracking number, when I submit it, then the page shows the parcel's current status
+     (for example "Out for delivery" or "Delivery attempted - no one home") and the date and time of its
+     latest update.
+  2. Given a tracking number that does not exist, when I submit it, then I see a clear "tracking number
+     not found" message and no details of any other parcel are shown.
+  3. Given the driver has just recorded a new attempt, when I refresh the page, then the page shows the
+     new status.
+
+STORY 2 - Driver
+As a driver, I want to record the outcome of each delivery attempt (delivered, no one home, wrong
+address or refused) with an optional note, so that the recipient sees an accurate status and the depot
+knows what to do with the parcel next.
+Acceptance criteria:
+  1. Given a parcel on my run, when I choose one of the four outcomes and save, then an attempt is stored
+     with that outcome, the time and my note, and it appears in the parcel's attempt history.
+  2. Given I try to save without choosing an outcome (or with a value that is not one of the four), then
+     the save is rejected with a message and nothing is stored.
+  3. Given I save a failed outcome (no one home, wrong address or refused), then the parcel is not shown
+     as delivered.
+
+Priority: I would place the DRIVER story higher in the backlog. The recipient story can only show an
+accurate status if drivers are already recording attempts - the driver story creates the data that the
+tracking page displays. Building it first means the recipient story can then be built and tested against
+real data, and it gives a small, valuable end-to-end slice early. (The recipient story is the one
+customers see, so it follows straight after, in the next sprint.)
+
+=== Question 1.2 ===
+#Answer below
+I would set up a lightweight Scrum-style process with the following
+guardrails.
+
+1. Prioritised product backlog
+   - What: one ordered list of user stories (for example "As a recipient I can
+     enter a tracking number and see where my parcel is"), each with
+     acceptance criteria. The Product Owner orders it.
+   - When: kept up to date continuously and refined once a sprint.
+   - Problem it prevents: developers picking whatever they like. Everyone
+     works on the most valuable item next, and the work is visible.
+
+2. Sprint planning
+   - What: the team picks the top backlog items it can finish, breaks them
+     into tasks and agrees a sprint goal.
+   - When: at the start of every sprint (a fixed length of two weeks).
+   - Problem it prevents: unclear priorities and over-commitment. Everyone
+     knows what the sprint is for.
+
+3. Visible workflow board (Kanban/Scrum board, for example the GitLab issue
+   board)
+   - What: every piece of work is a card with an owner, moving through the
+     columns Backlog -> To Do (sprint) -> In Progress -> In Review/Testing ->
+     Done, with a limit on how many cards may be In Progress at once.
+   - When: updated by whoever moves the work, in real time, all sprint.
+   - Problem it prevents: nobody knowing who is working on what. It shows the
+     progress of every item from the moment it is requested (a card in the
+     Backlog) to the moment it is finished (a card in Done), and makes
+     bottlenecks obvious.
+
+4. Daily stand-up
+   - What: a 15-minute meeting where each person says what they did, what they
+     will do and what is blocking them.
+   - When: every day at the same time.
+   - Problem it prevents: problems only being discovered by chance. Blockers
+     and dependencies surface within a day.
+
+5. Definition of Done and code review
+   - What: a shared checklist (code reviewed by a teammate, tests written and
+     passing, merged, deployed to a test environment) that a card must meet
+     before it moves to Done.
+   - When: applied to every item, every time.
+   - Problem it prevents: "finished" meaning different things to different
+     people and defects slipping through.
+
+6. Sprint review
+   - What: the team demos the working increment to stakeholders and gathers
+     feedback, which feeds the backlog.
+   - When: at the end of every sprint.
+   - Problem it prevents: building the wrong thing for too long.
+
+7. Sprint retrospective
+   - What: the team inspects how it worked and agrees one or two concrete
+     improvements.
+   - When: at the end of every sprint, after the review.
+   - Problem it prevents: the same process problems repeating sprint after
+     sprint.
+
+Together these give a complete, repeatable cycle: plan -> work visibly ->
+inspect daily -> finish to a shared standard -> demo -> improve.
+
+=== Question 1.3.1 ===
+#Answer below
+They are not the same.
+
+Daily stand-up
+- Purpose: to synchronise the team and surface blockers for today's work.
+- When/how often: every day, short (about 15 minutes), usually standing.
+- Focus: the immediate work - what I did yesterday, what I will do today, what
+  is in my way.
+- Produces: a shared picture of progress and a list of blockers to resolve
+  straight away.
+
+Sprint retrospective
+- Purpose: to improve the team's process, not the product.
+- When/how often: once at the end of each sprint, longer (about 45-90
+  minutes), after the sprint review.
+- Focus: the whole sprint and how the team worked together - what went well,
+  what did not, and why.
+- Produces: a small number of agreed, owned improvement actions to try in the
+  next sprint.
+
+In short: the stand-up looks at the next 24 hours of the work; the
+retrospective looks back over the whole sprint at the way of working.
+
+=== Question 1.3.2 ===
+#Answer below
+DAILY STAND-UP - three questions (about yesterday, today and blockers):
+  1. "What did you finish yesterday that moves the sprint goal forward?"
+     Finding out: the real progress since the last stand-up, so the board matches reality.
+  2. "What will you work on today?"
+     Finding out: who is doing what next, so work is not duplicated, and whether anyone needs a hand or a
+     pairing for today's tasks.
+  3. "Is anything blocking you or putting your task at risk?"
+     Finding out: impediments (a waiting review, a missing environment, an unclear story) that must be
+     removed today, rather than being discovered by chance later.
+
+SPRINT RETROSPECTIVE - three questions (about the whole sprint and how we worked):
+  1. "Looking back over the whole sprint, what went well that we should keep doing?"
+     Finding out: the practices and habits that worked, so the team protects them.
+  2. "What slowed us down or frustrated us this sprint, and why did it happen?"
+     Finding out: the root causes of problems in the way of working (for example late code reviews or
+     stories that were too big), not just the symptoms.
+  3. "What one or two specific changes will we try next sprint, and who will own each?"
+     Finding out: a small set of agreed, owned improvement actions to take into the next sprint.
+
+=== Question 2.2 ===
+#Answer below
+1. ENCAPSULATION
+   Definition: bundling data with the methods that work on it and hiding the
+   data's internal state behind a controlled public interface, so an object
+   protects its own rules (invariants).
+   How to recognise it: private (or protected) fields, public getters and
+   methods that validate before changing state, final on fields that must not
+   change, and no public setters for things that should not change.
+   Example: Parcel.weightKg is private and can only change through
+   updateWeightKg(double), which throws IllegalArgumentException for zero or
+   negative values. This guarantees a parcel's weight is always greater than
+   zero. (Also trackingNumber is private final with no setter.)
+
+2. ABSTRACTION
+   Definition: exposing only what something does and hiding how it does it, by
+   modelling the essential ideas and leaving out the detail. Callers depend on
+   a contract instead of an implementation.
+   How to recognise it: abstract classes and abstract methods (no body),
+   interfaces, and code that works with the general type rather than a
+   concrete one.
+   Example: Parcel is an abstract class with the abstract method
+   deliveryFee(). A caller such as DispatchCentre.totalDeliveryRevenue() only
+   knows "a parcel has a fee", not how each type calculates it. (The Insurable
+   interface is another example.)
+
+3. INHERITANCE
+   Definition: a class acquiring the fields and behaviour of another class so
+   that shared code is written once and specialised types extend a general
+   type ("is-a" relationship).
+   How to recognise it: the extends keyword (and implements for interfaces),
+   super(...) constructor calls, super.method() calls and @Override.
+   Example: StandardParcel, ExpressParcel and FragileParcel all declare
+   "extends Parcel" and call super(trackingNumber, senderName,
+   recipientAddress, weightKg), reusing the tracking number, weight and
+   delivered-state code from Parcel instead of repeating it.
+
+4. POLYMORPHISM
+   Definition: the same call behaving differently depending on the actual type
+   of the object it is made on - one interface, many forms.
+   How to recognise it: overridden methods (@Override), a parent-type or
+   interface variable/list holding child objects (List<Parcel>), and a method
+   call on that reference whose result differs per subtype, with no
+   if/instanceof chain choosing the behaviour.
+   Example: DispatchCentre keeps a List<Parcel> and totalDeliveryRevenue()
+   calls parcel.deliveryFee() on each one. The same call runs
+   StandardParcel's, ExpressParcel's or FragileParcel's own formula at
+   runtime, depending on the object.
+
+=== Question 3.1 ===
+#Answer below
+Greenfield development means starting a new piece of software from a blank page: there is no existing
+code to fit in with, so the developer designs the structure from scratch. Brownfield development means
+working in a system that already exists and is in use, whose code was written by someone else and has to
+keep working.
+
+In this repository, the dispatch package (Parcel, StandardParcel, ExpressParcel, FragileParcel,
+DispatchCentre) is greenfield: I designed the class hierarchy and wrote it from scratch. The model and
+service packages (Consignment, Driver and especially DeliveryRulesService) are brownfield: the previous
+team wrote them, they are already in use, and the business wants new rules added.
+
+Greenfield challenge: there are a great many open design decisions and no existing code or users to
+guide them, so it is easy to over-engineer or build the wrong thing. It changes how I work by making me
+design in small steps, write the tests as I go and get feedback early, rather than designing everything
+up front.
+
+Brownfield challenge: understanding code that is hard to read, with the original authors gone, and
+changing it without breaking behaviour people depend on. It changes how I work: I have to read and
+understand the code first, make sure tests cover the current behaviour before I touch it, and then make
+small, safe changes (refactoring) that I check after every step.
+
+=== Question 3.2 ===
+#Answer below
+Refactoring is restructuring existing code to improve its internal design,
+readability and maintainability WITHOUT changing its externally observable
+behaviour. The inputs and outputs stay exactly the same, and it is normally
+done in small steps with the tests passing after each one.
+
+How it differs from other changes:
+- Fixing a bug changes behaviour on purpose - wrong behaviour becomes correct.
+- Adding a feature changes behaviour on purpose - the code does something new.
+- Refactoring changes only the structure. The tests should pass unchanged
+  before and after.
+
+Example from DeliveryRulesService:
+- decideNextStep() is a deeply nested if/else pyramid (up to five levels)
+  that assigns a single "step" variable and returns it at the end. It is hard
+  to read and to extend with new rules. I would flatten it with guard clauses
+  and early returns ("if delivered return NONE", "if no attempts return
+  AWAITING_FIRST_ATTEMPT", "if last outcome is REFUSED return
+  RETURN_TO_SENDER" ...), extract the last attempt into a well-named variable,
+  and replace the repeated string literals with named constants or an enum.
+- canLoadOntoVehicle() is one very long boolean expression ending in
+  "if (...) return true; return false;". I would return the condition
+  directly, and split it into small named methods such as isDriverAvailable,
+  hasCapacityFor, isCertifiedFor and isInZone so each rule reads on its own and
+  a new rule is one more line.
+
+=== Question 3.3 ===
+#Answer below
+Approach: Test-Driven Development (TDD), using the Red -> Green -> Refactor
+cycle, working on top of the existing automated test suite
+(DeliveryRulesServiceTest) as a safety net.
+
+Why it keeps behaviour safe: no production code changes unless a test demands
+it, and the suite is run after every tiny step. If a refactoring accidentally
+changes behaviour, a test goes red immediately and the change is undone. The
+tests stay in the repository, so the next team inherits the same protection.
+
+Restructuring the existing code: first run the existing tests and confirm they
+are all green. If an existing behaviour is not covered, add a test that pins
+down the current behaviour before touching it (a characterisation test). Then
+refactor in small steps, running the tests after each step. The tests must
+never need editing to stay green.
+
+Adding the new rule ("a consignment heavier than 30 kg cannot be loaded unless
+the driver is working with a second driver") with the TDD cycle:
+
+1. RED - write a failing test first. For example: a 31 kg consignment and a
+   driver with no second driver -> canLoadOntoVehicle returns false. I would
+   also write the boundary and positive cases: exactly 30 kg is allowed; 31 kg
+   with a second driver is allowed. The test fails (or does not compile until
+   the Driver gets a way of saying it has a second driver, which I add as a
+   stub). I know I can move on when the new test fails for the right reason
+   (the rule is missing) and all other tests still pass.
+2. GREEN - write the simplest code that makes the test pass, for example a
+   MAX_SOLO_WEIGHT_KG = 30 constant and a condition "weight <= 30 or driver has
+   second driver". I know I can move on when the new tests and every existing
+   test are green.
+3. REFACTOR - with everything green, tidy the code: move the new condition
+   into a named method (for example weightAllowedForDriver), remove duplication,
+   improve names. I rerun the whole suite after every change. I know I am done
+   when the suite is still green and the code is clean.
+
+Then repeat the cycle for the next rule.
+
+=== Question 3.4 ===
+#Answer below
+1. DeliveryRulesServiceTest = UNIT testing. It tests one small unit
+   (one method of DeliveryRulesService at a time) in isolation, with
+   in-memory objects, no database, files or network. It is fast, and the
+   tests are written with knowledge of the code's structure.
+
+2. DatabaseSchemaTest = INTEGRATION testing. It does not test one class in
+   isolation: it checks that our code (Database and DatabaseSchema) works
+   together with a real external component, the SQLite driver and database,
+   by connecting, creating the schema and inspecting the real tables.
+
+3. The operations team's release check = ACCEPTANCE testing (user/business
+   acceptance testing, a black-box system test). It runs against the packaged
+   jar as a whole, from the outside, with no knowledge of the code, using
+   scenarios agreed with the business, and it decides whether the product is
+   accepted for release.
+
+What the third check confirms that the first two cannot: that the complete,
+packaged application, as it will actually be shipped, behaves the way the
+business agreed and signed off. Unit and integration tests can pass while the
+packaged system is still wrong or broken - for example a jar that is missing a
+library it needs at runtime, even though every test passed - and they
+only prove the code does what the developers meant, not that it meets the
+business's requirements.
+
+=== Question 4.1.1 ===
+#Answer below
+-SNAPSHOT marks a version as work in progress. 1.4.0-SNAPSHOT is the
+development build that is heading towards 1.4.0; it is not a fixed, final
+release. The artifact is mutable: every build can produce different contents
+under the same version number, and Maven will re-fetch newer snapshots. A
+snapshot should never go to customers because it may contain unfinished or
+untested code, it cannot be reproduced or traced to one exact set of source
+code, and a customer or support team cannot tell which snapshot they are
+running. Releases must be immutable and uniquely identifiable.
+
+=== Question 4.1.2 ===
+#Answer below
+No, 1.4.0 is not correct. The version I would release is 2.0.0.
+
+Under Semantic Versioning (MAJOR.MINOR.PATCH):
+- Fixing the rounding defect in fee quotes is a backward-compatible bug fix:
+  on its own a PATCH change.
+- Adding the new public method estimateDeliveryDate(...) without changing any
+  existing method is a backward-compatible new feature: a MINOR change.
+- Removing the public method DispatchClient.sendLegacy() is a breaking change.
+  The partner team's integration still calls it, so it would stop working (a
+  compile error or NoSuchMethodError). Breaking changes require a MAJOR bump.
+
+The highest level of change decides the version, and the breaking removal is
+the highest, so the next release is 2.0.0 (and the minor/patch numbers reset
+to 0). 1.4.0 would wrongly promise partners that the upgrade is safe.
+(Alternatively the team could keep sendLegacy() marked as deprecated and
+remove it in a later major release; then 1.4.0 would be right.)
+
+=== Question 4.2 ===
+#Answer below
+.gitlab-ci.yml now declares the stages compile -> test -> package, one job per
+stage running make compile, make test and make package. The package job
+declares artifacts: paths: target/courier-service-jar-with-dependencies.jar
+(kept for a week), so the jar can be downloaded from the pipeline page.
+
+Why the order matters:
+- Compile first: if the code does not compile, there is nothing to test or
+  package, so the pipeline fails fast and cheaply with a clear message.
+- Test second: only code that compiles can be tested, and the tests have to
+  pass before anything is packaged. This stops a broken build being produced
+  as a release candidate.
+- Package last: building the jar is the final step, and it should only happen
+  for code that has been compiled and verified. GitLab stages run in order and
+  a failed stage stops the later ones, so no one can download a jar from a
+  failed pipeline.
+
+=== Question 4.3.1 ===
+#Answer below
+A build tool is software that automates the repeatable steps needed to turn source code into a tested,
+runnable product, based on a description of the project, so that every build is done the same way.
+
+Jobs it automates (at least two):
+  - Dependency management: finding and downloading the libraries the project needs (and the libraries
+    those need) and adding them to the classpath.
+  - Compiling the source code with the right Java version.
+  - Running the automated tests.
+  - Packaging the compiled classes and resources into a distributable jar (with a manifest naming the main
+    class).
+
+Without one, on every developer's machine and in the pipeline the team would have to download each library
+jar by hand and keep the versions in step, run the compiler with long command lines and classpaths, run the
+test runner by hand, and assemble the jar and its manifest manually. This is slow, error-prone and
+different on every machine, so builds would not be repeatable.
+
+A build tool: Maven (others are Gradle and Ant).
+
+=== Question 4.3.2 ===
+#Answer below
+A pom.xml (Project Object Model) is the XML file at the root of a Maven project that describes the
+project: its identity (groupId, artifactId, version), its dependencies, its settings and how it is built.
+It aims to make the build declarative and repeatable: anyone, on any machine or in the pipeline, runs the
+same Maven commands and gets the same result, because the build is described in the file instead of being
+done by hand.
+
+Two things this pom.xml defines (other than dependencies):
+  1. The compiler configuration: maven-compiler-plugin with <release>17</release> (and the Java 17
+     properties). When Maven runs the compile phase it uses this plugin to compile the source code
+     for Java 17.
+  2. The packaging configuration: maven-assembly-plugin with the jar-with-dependencies descriptor and
+     <mainClass>za.co.wethinkcode.courier.Main</mainClass>, bound to the package phase. When Maven
+     packages the project it builds one runnable jar that contains our classes and the dependencies, with a
+     manifest naming Main as the class to start, which is what lets "java -jar" work.
+  (Also acceptable: the version 1.4.0-SNAPSHOT, which names the artifact Maven builds, and the
+  finalName courier-service, which sets the jar's file name.)
+
+=== Question 4.3.3 ===
+#Answer below
+A dependency is an external library that the project needs in order to compile, run or test. It is
+declared in the pom.xml by its coordinates, and Maven finds it in a repository (Maven Central), downloads it
+and the libraries it depends on, and puts it on the classpath, so the team does not manage jars by hand.
+
+The junit-jupiter declaration:
+  - groupId (org.junit.jupiter): the organisation/group that publishes the library.
+  - artifactId (junit-jupiter): the particular library within that group (the JUnit 5 API and engine for
+    writing tests).
+  - version (${junit.version}, which the properties section sets to 5.10.2): the exact release to use, so
+    every machine gets the same one.
+  - scope (test): the library is only needed for compiling and running tests. It is on the classpath for
+    the tests but not for the main code and it is not packaged into the jar.
+
+When I run mvn test, Maven resolves this dependency (downloads it into the local ~/.m2 repository if it is not
+already there), adds it to the test classpath, compiles the test classes, and Surefire then runs the tests
+with it.
+
+=== Question 4.5 ===
+#Answer below
+(a) A vehicle's maximum load must be greater than zero.
+    Table/column: vehicles.max_load_kg (REAL, also NOT NULL).
+    Constraint: CHECK (max_load_kg > 0).
+    If someone tries to insert or update a vehicle with a load of zero or less, the database rejects the
+    statement with a "CHECK constraint failed" error and the row is not saved.
+
+(b) A driver can do at most one run on a given date.
+    Table/columns: delivery_runs (driver_id, run_date).
+    Constraint: a composite UNIQUE (driver_id, run_date), covering both columns together. (The same rule
+    for vehicles is UNIQUE (vehicle_id, run_date).)
+    If someone tries to add a second run for the same driver on the same date, the database rejects it with
+    a "UNIQUE constraint failed" error and no second row is stored.
+
+(c) A parcel can never be loaded twice onto the same run.
+    Table/columns: run_parcels (run_id, parcel_id).
+    Constraint: a composite UNIQUE (run_id, parcel_id) (or a composite primary key on the two columns).
+    If someone tries to load the same parcel onto the same run again, the database rejects the insert with
+    a "UNIQUE constraint failed" error. The same parcel is still allowed on a different run.
+
+(d) No two parcels on the same run can have the same stop number.
+    Table/columns: run_parcels (run_id, stop_number).
+    Constraint: a composite UNIQUE (run_id, stop_number).
+    If someone tries to give a second parcel on the run a stop number that is already used, the database
+    rejects the insert or update with a "UNIQUE constraint failed" error. Different runs may reuse the same
+    stop number.
+
+Each of these is also shown on the ERD as a note on its table (see the wiki page "Delivery Runs ERD").
+
+=== Question 4.6.1 ===
+#Answer below
+With a run_id column on the parcels table, each parcel row can point to only ONE run. Rule 7 says a
+parcel can go out on more than one run (if nobody is home it is loaded again onto a later run). Putting the
+second run's id in the same column would overwrite the first one, so the history of the earlier run would
+be lost. The only way round it would be to duplicate the parcel row, which would break the rule that a
+tracking number is unique, or to cram several run numbers into one column, which the database cannot
+enforce or query properly.
+
+Rule 8 makes it worse: the stop number and the outcome belong to one parcel ON one particular run (a
+parcel can be stop 4 on Monday's run with the outcome NO_ONE_HOME and stop 1 on Tuesday's run with the
+outcome DELIVERED). Stored on the parcels table there would be room for only one stop number and one
+outcome per parcel, so earlier attempts would be lost.
+
+My design avoids this by recognising that runs and parcels are many-to-many and resolving it with the
+separate table run_parcels. It has one row per parcel per run, with a foreign key to delivery_runs and a
+foreign key to parcels, and it stores stop_number and outcome on that row. UNIQUE (run_id, parcel_id) stops
+a parcel being loaded twice onto one run, and UNIQUE (run_id, stop_number) stops duplicate stop numbers.
+
+=== Question 4.6.2 ===
+#Answer below
+PRIMARY KEY vs UNIQUE:
+  - A PRIMARY KEY is the column (or set of columns) that identifies a row. There is only one per table, it
+    can never be NULL, and it is what the foreign keys in other tables point at.
+  - A UNIQUE constraint only guarantees that no two rows share a value in that column. A table can have many
+    of them, and (unless NOT NULL is added) the column may allow NULL. It says "no duplicates", not "this is
+    the row's identity".
+
+Why hubs still needs a separate id even though hub_code is unique and never empty: the hub code is business
+data, and business data can change (a hub is renamed or re-coded, for example JHB-NORTH becomes JHB-N). The id
+is a meaningless surrogate key that never changes, so the row's identity stays stable.
+
+Why the tables that refer to a hub (drivers, vehicles, delivery_runs) should reference hubs.id rather than
+hub_code: if the hub code ever changes, every row in drivers, vehicles and delivery_runs that stored the
+old code would have to be updated, or the links would break, whereas an unchanging integer id never has to
+change. A small integer is also smaller and faster to index, store and join than a text code.
+
+=== Question 5.1.1 ===
+#Answer below
+Done in the code, not here: webdev/hello-world/js/update.js now gets the <ul id="languages">, sets an
+onclick handler on it, and when the clicked element (event.target) is an <li> it writes
+"You chose " + that item's text into the <p id="selection">. index.html is unchanged.
+
+=== Question 5.1.2 ===
+#Answer below
+1. The user types the address; the browser sends an HTTP GET request to the
+   server for /index.html.
+2. The server replies with an HTTP 200 response whose body is the HTML text.
+3. The browser's parser reads the HTML top to bottom and builds the DOM tree
+   (html, head, body, h1, p, ul with its li items, the empty p#selection).
+4. When it reaches <link rel="stylesheet" href="css/styles-2.css"> in the head,
+   it sends another GET for the stylesheet. It must have the CSS before it
+   paints, so the CSS is applied to the DOM (the pointer cursor, underline on
+   hover, bold selection paragraph) and the page can be rendered correctly
+   without flicker.
+5. When it reaches <script src="js/update.js" defer>, it sends a GET for the
+   script, downloading it in parallel while the parsing continues. The defer
+   attribute means "do not run this until the whole document has been
+   parsed".
+6. Once the HTML is fully parsed (the DOM is complete), the deferred script
+   runs. This ordering matters: the script calls
+   document.getElementById("languages"), which only returns the <ul> because
+   the DOM already exists; without defer in the head it would run before the
+   list existed and get null. The script sets the onclick handler on the ul.
+7. The browser paints the page: heading, paragraph, the three languages and an
+   empty "selection" paragraph. No more network requests are made.
+8. The user clicks "Python". The browser creates a click event on the <li>.
+   The event bubbles up to the <ul>, where our handler is registered (event
+   delegation: one handler for all items).
+9. The handler runs. event.target is the clicked <li>, and its textContent is
+   "Python". The handler sets the textContent of p#selection to
+   "You chose Python".
+10. Changing the DOM makes the browser re-render that part of the page, and the
+    user sees "You chose Python". This happened entirely in the browser,
+    with no new HTTP request to the server.
+
+=== Question 5.2.1 ===
+#Answer below
+GET asks the server to retrieve a resource. Any parameters are placed in the
+URL query string, so they are visible, bookmarkable, stored in the browser
+history and server logs and cached. A GET is meant to be safe and idempotent
+(it should not change anything on the server). POST sends data to the server
+in the body of the request to create or change something. The data is not in
+the URL, and it is not bookmarked or cached, and the browser warns before it is
+resent.
+The login form should use POST. Credentials and other data must not show in the
+URL, browser history or logs, and logging in is an action that creates a
+session, not a plain read. (A GET login URL could also be replayed or sent to
+others.)
+
+=== Question 5.2.2 ===
+#Answer below
+HTTP is stateless: each request is independent, and the server keeps no memory
+of earlier requests from a client by default. The expenses page request does
+not by itself say that this is the student who just logged in.
+WeShare remembers the student with a session. On a successful login, the
+server creates a session (stored server-side) and sends the browser a
+session ID in a cookie (Set-Cookie). The browser automatically returns this
+cookie with every following request to the site. When the request for the
+expenses page arrives, the server uses the session ID in the cookie to look
+up the session and learns which student is asking, then lists only that
+student's expenses.
+
+=== Question 5.2.3 ===
+#Answer below
+Model-View-Controller splits the application into three parts with different
+responsibilities:
+- Model: the data and business rules. In this journey it is the student and
+  expense data - checking whether the email belongs to a student, and getting
+  that student's expenses from the database.
+- View: the presentation. It produces what the user sees, with no business
+  logic. Here it is the login page (the form) and the expenses page, which
+  renders the list of expenses as HTML.
+- Controller: the coordinator that handles the incoming request. Here it
+  receives the POST from the login form, asks the Model to check the
+  student, starts the session, and chooses the next step: redirect to the
+  expenses page. For the GET of the expenses page it gets the student's
+  expenses from the Model and passes them to the View.
+
+=== Question 5.2.4 ===
+#Answer below
+This is the Post/Redirect/Get pattern. If the server answered the POST
+directly with the expenses page, the browser would still be on the result of
+a form submission, and refreshing the page or pressing Back would resubmit
+the form (a duplicate login or, in other cases, a duplicate order or
+payment). Redirecting makes the browser follow up with a fresh GET to the
+expenses page, so the URL in the address bar is the real expenses page, which
+can be refreshed and bookmarked safely, and the form is not resent.
+
+=== Question 5.3.1 ===
+#Answer below
+- Server-side generation: the work happens on the server. When the browser
+  requests /balances.html, server code reads the logged-in user's balances
+  from the database and builds the complete HTML (a template filled in with
+  the balances). The browser receives a finished HTML page and just displays
+  it.
+- Client-side generation: the work happens in the user's browser. The server
+  sends a mostly empty HTML page (a shell) plus JavaScript. The script runs in
+  the browser, requests the balances from the server, and builds the page's
+  content in the DOM itself. The browser receives HTML + JavaScript, and the
+  balances arrive afterwards as data.
+
+=== Question 5.3.2 ===
+#Answer below
+An API endpoint is a URL on the server (for example GET /api/balances) that a
+program, instead of a person, calls to get or change data; it exposes the
+application's functionality in a machine-readable way. The response is
+usually JSON instead of HTML because JSON is compact, language independent
+and maps directly to objects in JavaScript, so the client can use it without
+parsing markup. It separates the data from its presentation: the same endpoint
+can serve the website, a mobile app or other services, and the client
+decides how to display it. HTML mixes the data with layout and would have to
+be parsed to extract values.
+
+=== Question 5.3.3 ===
+#Answer below
+1. Updating every 30 seconds without reloading the whole page: client-side
+   generation. JavaScript in the browser can call the balances API every 30
+   seconds and change only the numbers in the DOM. With pure server-side
+   generation, the only way to see new balances is to request a whole new page.
+2. Showing balances to browsers with JavaScript switched off: server-side
+   generation. The balances are already in the HTML the server sends, so they
+   show without any script running. A client-side page would show only an
+   empty shell.
+Can both be met? Yes. Render the page on the server, so the first HTML
+already contains the balances (works with no JavaScript), and then enhance it
+with JavaScript that polls the balances API every 30 seconds and updates the
+numbers in place (progressive enhancement). Users with JavaScript off still see
+their balances (just not updated automatically), and users with JavaScript on get
+live updates. The API must check that the user is logged in so that users see only
+their own balances.
